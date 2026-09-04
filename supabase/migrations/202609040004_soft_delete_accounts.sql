@@ -48,12 +48,12 @@ begin
     and m.status in ('scheduled', 'active', 'overtime')
     and (product_a.owner_id = account_id) <> (product_b.owner_id = account_id);
 
-  update public.arena_entries entry
+  update public.arena_entries ae
   set status = 'eliminated', eliminated_round = coalesce(eliminated_round, 0)
   using public.products p
-  where entry.product_id = p.id
+  where ae.product_id = p.id
     and p.owner_id = account_id
-    and entry.status in ('queued', 'active');
+    and ae.status in ('queued', 'active');
 
   update public.products set status = 'archived' where owner_id = account_id and status <> 'archived';
   update public.outbound_clicks set user_id = null where user_id = account_id;
