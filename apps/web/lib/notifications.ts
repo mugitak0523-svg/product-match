@@ -20,6 +20,8 @@ export const notifications = {
   "password-reset-sent": { type: "success", message: "パスワード再設定メールを送信しました。" },
   "password-reset-complete": { type: "success", message: "パスワードを更新しました。新しいパスワードでログインしてください。" },
   "password-reset-invalid": { type: "error", message: "再設定リンクが無効か期限切れです。もう一度お試しください。" },
+  "profile-updated": { type: "success", message: "プロフィールを更新しました。" },
+  "profile-update-failed": { type: "error", message: "プロフィールを更新できませんでした。ユーザー名が既に使われている可能性があります。" },
 } as const;
 
 export type NotificationCode = keyof typeof notifications;
