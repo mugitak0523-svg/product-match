@@ -17,7 +17,7 @@ export async function deleteAccount(formData: FormData) {
   if (retireError) redirect("/dashboard/account?notice=account-deletion-failed");
 
   const admin = createAdminClient();
-  const { error: deleteError } = await admin.auth.admin.deleteUser(user.id, { shouldSoftDelete: true });
+  const { error: deleteError } = await admin.auth.admin.deleteUser(user.id, true);
   if (deleteError) redirect("/login?notice=account-deletion-failed");
 
   await supabase.auth.signOut();
