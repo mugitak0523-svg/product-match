@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "npm run dev -w @product-match/web",
     "build": "npm run build -w @product-match/web",
-    "lint": "npm run lint -w @product-match/web"
+    "lint": "npm run lint -w @product-match/web",
+    "test": "npm run test -w @product-match/web"
   }
 }

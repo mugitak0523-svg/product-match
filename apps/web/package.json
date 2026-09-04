@@ -1,12 +1,15 @@
 {
   "name": "@product-match/web",
   "private": true,
-  "engines": { "node": ">=22" },
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "vitest run"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.5",
@@ -23,6 +26,8 @@
     "@types/react-dom": "19.2.5",
     "eslint": "9.39.5",
     "eslint-config-next": "16.3.4",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "vite": "8.2.2",
+    "vitest": "5.0.0"
   }
 }
