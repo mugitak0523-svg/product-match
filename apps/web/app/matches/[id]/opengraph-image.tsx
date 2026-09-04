@@ -1,0 +1,5 @@
+import { ImageResponse } from "next/og";
+import { getMatch } from "@/lib/data";
+
+export const size={width:1200,height:630};export const contentType="image/png";
+export default async function OpenGraphImage({params}:{params:Promise<{id:string}>}){const {id}=await params;const match=await getMatch(id);if(!match)return new ImageResponse(<div style={{display:"flex",width:"100%",height:"100%",alignItems:"center",justifyContent:"center",background:"#f7f5ef",fontSize:72}}>Product Match</div>,size);return new ImageResponse(<div style={{display:"flex",flexDirection:"column",width:"100%",height:"100%",justifyContent:"center",alignItems:"center",background:"#f7f5ef",color:"#171714",fontFamily:"sans-serif"}}><div style={{fontSize:24,letterSpacing:6,color:"#ff5b35"}}>PRODUCT MATCH</div><div style={{display:"flex",alignItems:"center",gap:52,marginTop:80,fontSize:68,fontWeight:800}}><span>{match.product_a.name}</span><span style={{fontSize:30,color:"#ff5b35"}}>VS</span><span>{match.product_b.name}</span></div><div style={{marginTop:80,fontSize:32}}>{match.status==="completed"?"FINAL RESULT":"VOTING NOW"}</div></div>,size)}

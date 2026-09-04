@@ -1,0 +1,4 @@
+project_id = "product-match"
+
+[functions.settle-matches]
+verify_jwt = false

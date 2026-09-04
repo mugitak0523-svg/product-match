@@ -1,0 +1,5 @@
+import Link from "next/link";
+import { ProductMark } from "@/components/product-mark";
+import { createClient } from "@/lib/supabase/server";
+
+export default async function RankingsPage(){const supabase=await createClient();const {data}=await supabase.from("product_rankings").select("*").limit(100);return <div className="page-shell"><span className="eyebrow">All-time leaderboard</span><h1>Rankings</h1><p className="muted">Ranked by real match wins—never paid placement.</p><table className="table" style={{marginTop:32}}><thead><tr><th>#</th><th>Product</th><th>Wins</th><th>Championships</th><th>Finals</th></tr></thead><tbody>{data?.map((item,index)=><tr key={item.id}><td>{index+1}</td><td><Link className="product-card-copy" href={`/products/${item.slug}`}><ProductMark name={item.name} src={item.logo_url} size={34}/><strong style={{marginLeft:10}}>{item.name}</strong></Link></td><td>{item.wins}</td><td>{item.championships}</td><td>{item.final_appearances}</td></tr>)}</tbody></table></div>}

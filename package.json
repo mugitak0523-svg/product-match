@@ -1,0 +1,10 @@
+{
+  "name": "product-match",
+  "private": true,
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "dev": "npm run dev -w @product-match/web",
+    "build": "npm run build -w @product-match/web",
+    "lint": "npm run lint -w @product-match/web"
+  }
+}

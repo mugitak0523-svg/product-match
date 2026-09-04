@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+
+# Editor settings
+.idea/
+.vscode/
+
+# Temporary files
+*.log
+*.tmp
+*.swp
+
+# Dependencies and build output
+node_modules/
+.next/
+out/
+coverage/
+
+# Local environment
+.env
+.env.local
+.env.*.local
+
+# Supabase local state
+supabase/.branches/
+supabase/.temp/

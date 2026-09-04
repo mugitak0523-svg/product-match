@@ -1,0 +1,6 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ProductMark } from "@/components/product-mark";
+import { createClient } from "@/lib/supabase/server";
+
+export default async function ProfilePage({params}:{params:Promise<{username:string}>}){const {username}=await params;const supabase=await createClient();const {data:profile}=await supabase.from("profiles").select("*,products(*)").eq("username",username).maybeSingle();if(!profile)notFound();return <div className="page-shell"><section className="profile-hero"><ProductMark name={profile.display_name??username} src={profile.avatar_url} size={92}/><div><span className="eyebrow">Maker profile</span><h1 style={{fontSize:56,margin:"8px 0"}}>{profile.display_name??username}</h1><p className="muted">{profile.bio}</p></div></section><h2>Products</h2><div className="grid">{profile.products?.filter((p:{status:string})=>p.status==="approved").map((product:{id:string;slug:string;name:string;logo_url:string;tagline:string})=><Link className="product-card" href={`/products/${product.slug}`} key={product.id}><ProductMark name={product.name} src={product.logo_url}/><span className="product-card-copy"><strong>{product.name}</strong><span>{product.tagline}</span></span></Link>)}</div></div>}

@@ -1,0 +1,3 @@
+-- Seed data is intentionally empty because products must reference real Auth users.
+-- Create a user through the application, then approve the profile as an admin:
+-- update public.profiles set role = 'admin' where username = 'your-username';
