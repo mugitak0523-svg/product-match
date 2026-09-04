@@ -35,13 +35,13 @@ export async function signInWithEmail(formData: FormData) {
 export async function signUp(formData: FormData) {
   const supabase = await createClient();
   const next = safeNextPath(formData.get("next"));
-  const parsed = signupSchema.safeParse({ email: formData.get("email"), password: formData.get("password"), displayName: formData.get("displayName") });
+  const parsed = signupSchema.safeParse({ email: formData.get("email"), password: formData.get("password") });
   if (!parsed.success) authRedirect("/signup", "error", parsed.error.issues[0]?.message ?? "入力内容を確認してください。", next);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const { error } = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
-    options: { data: { display_name: parsed.data.displayName }, emailRedirectTo: `${siteUrl}/auth/callback` },
+    options: { emailRedirectTo: `${siteUrl}/auth/callback` },
   });
   if (error) authRedirect("/signup", "error", authErrorMessage(error), next);
   const query = new URLSearchParams({ message: "Check your email to confirm your account" });

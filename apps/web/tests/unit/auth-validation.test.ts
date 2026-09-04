@@ -10,8 +10,8 @@ describe("authentication input validation", () => {
     expect(loginSchema.safeParse({ email: "not-an-email", password: "short" }).success).toBe(false);
   });
 
-  it("requires a valid display name for sign-up", () => {
-    expect(signupSchema.safeParse({ email: "maker@example.com", password: "password123", displayName: "M" }).success).toBe(false);
+  it("accepts email and password without a display name for sign-up", () => {
+    expect(signupSchema.safeParse({ email: "maker@example.com", password: "password123" }).success).toBe(true);
   });
 
   it("allows only internal post-login paths", () => {

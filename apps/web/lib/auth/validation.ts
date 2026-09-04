@@ -7,7 +7,6 @@ export const loginSchema = z.object({ email, password });
 export const signupSchema = z.object({
   email,
   password,
-  displayName: z.string().trim().min(2, "表示名は2文字以上にしてください").max(60, "表示名は60文字以内にしてください"),
 });
 
 export function safeNextPath(value: FormDataEntryValue | string | null | undefined) {
