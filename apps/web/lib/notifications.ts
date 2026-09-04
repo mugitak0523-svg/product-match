@@ -17,6 +17,9 @@ export const notifications = {
   "admin-action-failed": { type: "error", message: "管理操作を完了できませんでした。もう一度お試しください。" },
   "account-deleted": { type: "success", message: "アカウントを削除しました。" },
   "account-deletion-failed": { type: "error", message: "アカウントを削除できませんでした。もう一度お試しください。" },
+  "password-reset-sent": { type: "success", message: "該当するアカウントがある場合、パスワード再設定メールを送信しました。" },
+  "password-reset-complete": { type: "success", message: "パスワードを更新しました。新しいパスワードでログインしてください。" },
+  "password-reset-invalid": { type: "error", message: "再設定リンクが無効か期限切れです。もう一度お試しください。" },
 } as const;
 
 export type NotificationCode = keyof typeof notifications;
