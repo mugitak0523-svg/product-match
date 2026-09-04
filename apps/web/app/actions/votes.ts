@@ -12,7 +12,7 @@ export async function castVote(formData: FormData) {
   const productId = String(formData.get("productId") ?? "");
   if (!user) redirect(`/login?next=/matches/${matchId}`);
   const { error } = await supabase.rpc("cast_vote", { target_match_id: matchId, target_product_id: productId });
-  if (error) redirect(`/matches/${matchId}?error=${encodeURIComponent(error.message)}`);
+  if (error) redirect(`/matches/${matchId}?notice=vote-failed`);
   const store = await cookies();
   const sessionId = crypto.randomUUID();
   const expiresAt = new Date(Date.now() + 60 * 60 * 12 * 1000);

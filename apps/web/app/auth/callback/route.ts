@@ -19,7 +19,7 @@ export async function GET(request: Request) {
       },
     });
     const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (error) return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent("ログインに失敗しました。もう一度お試しください。")}`, url.origin));
+    if (error) return NextResponse.redirect(new URL("/login?notice=auth-failed", url.origin));
   }
   return response;
 }

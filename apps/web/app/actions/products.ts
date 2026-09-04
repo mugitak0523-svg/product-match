@@ -24,11 +24,11 @@ export async function submitProduct(formData: FormData) {
     name: formData.get("name"), url: formData.get("url"), tagline: formData.get("tagline"),
     description: formData.get("description"), category: formData.get("category"), pricingType: formData.get("pricingType") ?? "unknown",
   });
-  if (!parsed.success) redirect(`/submit?error=${encodeURIComponent(parsed.error.issues[0]?.message ?? "Invalid input")}`);
+  if (!parsed.success) redirect("/submit?notice=invalid-input");
 
   const logo = formData.get("logo") as File;
   const screenshot = formData.get("screenshot") as File;
-  if (!logo?.size || !screenshot?.size) redirect("/submit?error=Logo and primary screenshot are required");
+  if (!logo?.size || !screenshot?.size) redirect("/submit?notice=required-images");
 
   const baseSlug = slugify(parsed.data.name);
   const uniqueSlug = `${baseSlug}-${crypto.randomUUID().slice(0, 6)}`;
@@ -49,11 +49,11 @@ export async function submitProduct(formData: FormData) {
     }).select("id").single();
     if (error) throw error;
     await supabase.from("product_screenshots").insert({ product_id: product.id, image_url: screenshotUrl, sort_order: 0 });
-  } catch (error) {
-    redirect(`/submit?error=${encodeURIComponent(error instanceof Error ? error.message : "Submission failed")}`);
+  } catch {
+    redirect("/submit?notice=product-submission-failed");
   }
   revalidatePath("/dashboard");
-  redirect("/dashboard?submitted=1");
+  redirect("/dashboard?notice=product-submitted");
 }
 
 export async function joinArenaQueue(formData: FormData) {
@@ -62,7 +62,7 @@ export async function joinArenaQueue(formData: FormData) {
   if (!user) redirect("/login");
   const productId = String(formData.get("productId") ?? "");
   const { error } = await supabase.rpc("join_arena_queue", { target_product_id: productId });
-  if (error) redirect(`/dashboard?error=${encodeURIComponent(error.message)}`);
+  if (error) redirect("/dashboard?notice=arena-queue-failed");
   revalidatePath("/dashboard");
 }
 
@@ -75,10 +75,10 @@ export async function updateProduct(formData: FormData) {
     name: formData.get("name"), url: formData.get("url"), tagline: formData.get("tagline"),
     description: formData.get("description"), category: formData.get("category"), pricingType: formData.get("pricingType") ?? "unknown",
   });
-  if (!parsed.success) redirect(`/dashboard/products/${productId}?error=${encodeURIComponent(parsed.error.issues[0]?.message ?? "Invalid input")}`);
+  if (!parsed.success) redirect(`/dashboard/products/${productId}?notice=invalid-input`);
   const { pricingType, ...fields } = parsed.data;
   const { error } = await supabase.from("products").update({ ...fields, pricing_type: pricingType, status: "submitted" }).eq("id", productId).eq("owner_id", user.id);
-  if (error) redirect(`/dashboard/products/${productId}?error=${encodeURIComponent(error.message)}`);
+  if (error) redirect(`/dashboard/products/${productId}?notice=product-update-failed`);
   revalidatePath("/dashboard");
-  redirect("/dashboard?submitted=1");
+  redirect("/dashboard?notice=product-submitted");
 }

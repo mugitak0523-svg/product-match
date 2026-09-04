@@ -1,0 +1,31 @@
+.notification-toast {
+  position: fixed;
+  z-index: 100;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(560px, calc(100vw - 32px));
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 16px;
+  border: 1px solid;
+  border-radius: 12px;
+  box-shadow: 0 14px 36px #1717142b;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.notification-toast-error { background: #fff1ed; border-color: #f4b4a4; color: #8a260f; }
+.notification-toast-success { background: #effbd5; border-color: #c4e883; color: #40570d; }
+
+.notification-toast button {
+  border: 0;
+  background: transparent;
+  color: currentColor;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 2px;
+}

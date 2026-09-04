@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { authErrorMessage, loginSchema, safeNextPath, signupSchema } from "@/lib/auth/validation";
+import { loginSchema, safeNextPath, signupSchema } from "@/lib/auth/validation";
+import { authErrorNotice, notifications } from "@/lib/notifications";
 
 describe("authentication input validation", () => {
   it("accepts a valid login", () => {
@@ -20,7 +21,9 @@ describe("authentication input validation", () => {
     expect(safeNextPath("//attacker.example")).toBe("/discover");
   });
 
-  it("does not expose raw invalid-password errors", () => {
-    expect(authErrorMessage(new Error("Invalid login credentials"))).toBe("メールアドレスまたはパスワードが正しくありません。");
+  it("uses a safe notification code for authentication errors", () => {
+    expect(authErrorNotice(new Error("Invalid login credentials"))).toBe("invalid-credentials");
+    expect(authErrorNotice(new Error("Database error saving new user"))).toBe("auth-failed");
+    expect(notifications[authErrorNotice(new Error("Database error saving new user"))].message).not.toContain("Database error");
   });
 });

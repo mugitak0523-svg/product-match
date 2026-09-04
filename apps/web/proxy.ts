@@ -4,6 +4,13 @@ import { NextResponse, type NextRequest } from "next/server";
 const protectedPaths = ["/dashboard", "/submit"];
 
 export async function proxy(request: NextRequest) {
+  if (request.nextUrl.searchParams.has("error") || request.nextUrl.searchParams.has("message")) {
+    const safeUrl = request.nextUrl.clone();
+    safeUrl.searchParams.delete("error");
+    safeUrl.searchParams.delete("message");
+    safeUrl.searchParams.set("notice", "auth-failed");
+    return NextResponse.redirect(safeUrl);
+  }
   let response = NextResponse.next({ request });
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, publishableKey!, {

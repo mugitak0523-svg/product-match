@@ -13,11 +13,3 @@ export function safeNextPath(value: FormDataEntryValue | string | null | undefin
   if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//")) return "/discover";
   return value;
 }
-
-export function authErrorMessage(error: unknown) {
-  const message = error instanceof Error ? error.message : "認証に失敗しました。もう一度お試しください。";
-  if (/invalid login credentials/i.test(message)) return "メールアドレスまたはパスワードが正しくありません。";
-  if (/email not confirmed/i.test(message)) return "確認メール内のリンクを開いてからログインしてください。";
-  if (/already registered/i.test(message)) return "このメールアドレスは既に登録されています。";
-  return message;
-}

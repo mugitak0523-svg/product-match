@@ -2,10 +2,11 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { authErrorMessage, loginSchema, safeNextPath, signupSchema } from "@/lib/auth/validation";
+import { loginSchema, safeNextPath, signupSchema } from "@/lib/auth/validation";
+import { authErrorNotice, type NotificationCode } from "@/lib/notifications";
 
-function authRedirect(path: "/login" | "/signup", key: "error" | "message", value: string, next?: string) {
-  const query = new URLSearchParams({ [key]: value });
+function authRedirect(path: "/login" | "/signup", notice: NotificationCode, next?: string) {
+  const query = new URLSearchParams({ notice });
   if (next && next !== "/discover") query.set("next", next);
   redirect(`${path}?${query.toString()}`);
 }
@@ -17,18 +18,18 @@ export async function signInWithOAuth(provider: "google" | "github", formData: F
   const callback = new URL("/auth/callback", siteUrl);
   callback.searchParams.set("next", next);
   const { data, error } = await supabase.auth.signInWithOAuth({ provider, options: { redirectTo: callback.toString() } });
-  if (error) authRedirect("/login", "error", authErrorMessage(error), next);
+  if (error) authRedirect("/login", authErrorNotice(error), next);
   if (data.url) redirect(data.url);
-  authRedirect("/login", "error", "ログインを開始できませんでした。", next);
+  authRedirect("/login", "oauth-start-failed", next);
 }
 
 export async function signInWithEmail(formData: FormData) {
   const supabase = await createClient();
   const next = safeNextPath(formData.get("next"));
   const parsed = loginSchema.safeParse({ email: formData.get("email"), password: formData.get("password") });
-  if (!parsed.success) authRedirect("/login", "error", parsed.error.issues[0]?.message ?? "入力内容を確認してください。", next);
+  if (!parsed.success) authRedirect("/login", "invalid-input", next);
   const { error } = await supabase.auth.signInWithPassword(parsed.data);
-  if (error) authRedirect("/login", "error", authErrorMessage(error), next);
+  if (error) authRedirect("/login", authErrorNotice(error), next);
   redirect(next);
 }
 
@@ -36,15 +37,15 @@ export async function signUp(formData: FormData) {
   const supabase = await createClient();
   const next = safeNextPath(formData.get("next"));
   const parsed = signupSchema.safeParse({ email: formData.get("email"), password: formData.get("password") });
-  if (!parsed.success) authRedirect("/signup", "error", parsed.error.issues[0]?.message ?? "入力内容を確認してください。", next);
+  if (!parsed.success) authRedirect("/signup", "invalid-input", next);
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
   const { error } = await supabase.auth.signUp({
     email: parsed.data.email,
     password: parsed.data.password,
     options: { emailRedirectTo: `${siteUrl}/auth/callback` },
   });
-  if (error) authRedirect("/signup", "error", authErrorMessage(error), next);
-  const query = new URLSearchParams({ message: "Check your email to confirm your account" });
+  if (error) authRedirect("/signup", authErrorNotice(error), next);
+  const query = new URLSearchParams({ notice: "account-created" });
   if (next !== "/discover") query.set("next", next);
   redirect(`/login?${query.toString()}`);
 }
