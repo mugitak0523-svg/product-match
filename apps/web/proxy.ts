@@ -24,6 +24,16 @@ export async function proxy(request: NextRequest) {
     },
   });
   const { data: { user } } = await supabase.auth.getUser();
+  if (user) {
+    const { data: profile } = await supabase.from("profiles").select("deleted_at").eq("id", user.id).maybeSingle();
+    if (profile?.deleted_at) {
+      const loginUrl = request.nextUrl.clone();
+      loginUrl.pathname = "/login";
+      loginUrl.search = "";
+      loginUrl.searchParams.set("notice", "account-deleted");
+      return NextResponse.redirect(loginUrl);
+    }
+  }
   if (!user && protectedPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/login";
