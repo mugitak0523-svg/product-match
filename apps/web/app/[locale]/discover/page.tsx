@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { MatchCard } from "@/components/match-card";

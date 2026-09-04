@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { notFound } from "next/navigation";
 import { createComment } from "@/app/actions/comments";
 import { ProductMark } from "@/components/product-mark";
