@@ -50,7 +50,7 @@ begin
 
   update public.arena_entries ae
   set status = 'eliminated', eliminated_round = coalesce(eliminated_round, 0)
-  using public.products p
+  from public.products p
   where ae.product_id = p.id
     and p.owner_id = account_id
     and ae.status in ('queued', 'active');
