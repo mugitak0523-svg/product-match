@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ProductMark } from "@/components/product-mark";
 import { createClient } from "@/lib/supabase/server";
 

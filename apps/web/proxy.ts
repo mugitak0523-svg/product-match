@@ -1,7 +1,10 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import createIntlMiddleware from "next-intl/middleware";
+import { routing } from "@/i18n/routing";
 
 const protectedPaths = ["/dashboard", "/submit"];
+const intlMiddleware = createIntlMiddleware(routing);
 
 export async function proxy(request: NextRequest) {
   if (request.nextUrl.searchParams.has("error") || request.nextUrl.searchParams.has("message")) {
@@ -11,14 +14,15 @@ export async function proxy(request: NextRequest) {
     safeUrl.searchParams.set("notice", "auth-failed");
     return NextResponse.redirect(safeUrl);
   }
-  let response = NextResponse.next({ request });
+  const isNonLocalizedRoute = ["/auth", "/visit"].some((path) => request.nextUrl.pathname.startsWith(path));
+  let response = isNonLocalizedRoute ? NextResponse.next({ request }) : intlMiddleware(request);
+  if (response.headers.get("location")) return response;
   const publishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const supabase = createServerClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, publishableKey!, {
     cookies: {
       getAll: () => request.cookies.getAll(),
       setAll: (cookiesToSet) => {
         cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-        response = NextResponse.next({ request });
         cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
       },
     },
@@ -28,15 +32,18 @@ export async function proxy(request: NextRequest) {
     const { data: profile } = await supabase.from("profiles").select("deleted_at").eq("id", user.id).maybeSingle();
     if (profile?.deleted_at) {
       const loginUrl = request.nextUrl.clone();
-      loginUrl.pathname = "/login";
+      const locale = request.nextUrl.pathname.split("/")[1] || routing.defaultLocale;
+      loginUrl.pathname = `/${locale}/login`;
       loginUrl.search = "";
       loginUrl.searchParams.set("notice", "account-deleted");
       return NextResponse.redirect(loginUrl);
     }
   }
-  if (!user && protectedPaths.some((path) => request.nextUrl.pathname.startsWith(path))) {
+  const pathname = request.nextUrl.pathname.replace(/^\/(en|ja)(?=\/|$)/, "") || "/";
+  if (!user && protectedPaths.some((path) => pathname.startsWith(path))) {
     const loginUrl = request.nextUrl.clone();
-    loginUrl.pathname = "/login";
+    const locale = request.nextUrl.pathname.split("/")[1] || routing.defaultLocale;
+    loginUrl.pathname = `/${locale}/login`;
     loginUrl.searchParams.set("next", request.nextUrl.pathname);
     return NextResponse.redirect(loginUrl);
   }
