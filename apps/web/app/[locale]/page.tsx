@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ArrowRight, Trophy, Users, Zap } from "lucide-react";
 import { MatchCard } from "@/components/match-card";
 import { getActiveMatches } from "@/lib/data";

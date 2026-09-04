@@ -1,0 +1,6 @@
+{
+  "Navigation": {"discover":"見つける","arenas":"アリーナ","rankings":"ランキング","submit":"Productを登録","signIn":"ログイン","signOut":"ログアウト"},
+  "Auth": {"welcome":"おかえりなさい","loginTitle":"アリーナに入る","loginDescription":"投票して、新しいProductを見つけるためにログインしてください。","google":"Googleで続ける","github":"GitHubで続ける","or":"または","email":"メールアドレス","password":"パスワード","signIn":"ログイン","newHere":"はじめてですか？","createAccount":"アカウントを作成","join":"Product Matchに参加","signupTitle":"アカウントを作成","signupDescription":"投票やProduct登録のためにアカウントを作成します。","orEmail":"またはメールアドレスで登録","alreadyMember":"すでにアカウントをお持ちですか？","checkEmail":"確認メールを開いて、アカウントを有効化してください。"},
+  "Language": {"label":"言語","english":"English","japanese":"日本語"},
+  "Footer": {"tagline":"2つのProduct。勝者は1つ。"}
+}

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { getArenas } from "@/lib/data";
 import { formatDate } from "@/lib/utils";
 

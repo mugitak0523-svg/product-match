@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { redirect } from "next/navigation";
 import { joinArenaQueue } from "@/app/actions/products";
 import { signOut } from "@/app/actions/auth";

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import type { Match } from "@/lib/types";
 import { ProductMark } from "@/components/product-mark";
 import { roundLabel } from "@/lib/utils";
