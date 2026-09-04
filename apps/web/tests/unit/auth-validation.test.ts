@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { loginSchema, safeNextPath, signupSchema } from "@/lib/auth/validation";
+import { loginSchema, resetPasswordSchema, safeNextPath, signupSchema } from "@/lib/auth/validation";
 import { authErrorNotice, notifications } from "@/lib/notifications";
 
 describe("authentication input validation", () => {
@@ -13,6 +13,11 @@ describe("authentication input validation", () => {
 
   it("accepts email and password without a display name for sign-up", () => {
     expect(signupSchema.safeParse({ email: "maker@example.com", password: "password123" }).success).toBe(true);
+  });
+
+  it("requires matching reset passwords", () => {
+    expect(resetPasswordSchema.safeParse({ password: "password123", confirmPassword: "password123" }).success).toBe(true);
+    expect(resetPasswordSchema.safeParse({ password: "password123", confirmPassword: "different123" }).success).toBe(false);
   });
 
   it("allows only internal post-login paths", () => {

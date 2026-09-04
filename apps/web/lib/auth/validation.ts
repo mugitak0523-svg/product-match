@@ -8,6 +8,14 @@ export const signupSchema = z.object({
   email,
   password,
 });
+export const resetPasswordRequestSchema = z.object({ email });
+export const resetPasswordSchema = z.object({
+  password,
+  confirmPassword: password,
+}).refine((value) => value.password === value.confirmPassword, {
+  message: "パスワードが一致しません",
+  path: ["confirmPassword"],
+});
 
 export function safeNextPath(value: FormDataEntryValue | string | null | undefined) {
   if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//")) return "/discover";
