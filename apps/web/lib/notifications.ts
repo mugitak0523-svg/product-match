@@ -15,6 +15,8 @@ export const notifications = {
   "comment-invalid": { type: "error", message: "コメントは2〜2,000文字で入力してください。" },
   "comment-failed": { type: "error", message: "コメントを投稿できませんでした。もう一度お試しください。" },
   "admin-action-failed": { type: "error", message: "管理操作を完了できませんでした。もう一度お試しください。" },
+  "account-deleted": { type: "success", message: "アカウントを削除しました。" },
+  "account-deletion-failed": { type: "error", message: "アカウントを削除できませんでした。もう一度お試しください。" },
 } as const;
 
 export type NotificationCode = keyof typeof notifications;
