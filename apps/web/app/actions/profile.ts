@@ -11,7 +11,7 @@ const profileSchema = z.object({
   avatarUrl: optionalUrl,
   bio: z.string().trim().max(500),
   websiteUrl: optionalUrl,
-  xHandle: z.string().trim().replace(/^@/, "").max(30).regex(/^[A-Za-z0-9_]*$/),
+  xHandle: z.string().trim().max(31).regex(/^@?[A-Za-z0-9_]*$/).transform((value) => value.replace(/^@/, "")),
   githubUrl: optionalUrl,
   linkedinUrl: optionalUrl,
 });
